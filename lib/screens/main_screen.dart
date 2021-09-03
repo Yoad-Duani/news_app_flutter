@@ -50,12 +50,12 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: StreamBuilder(
         stream: _bottomNavBarBloc.itemStream,
         initialData: _bottomNavBarBloc.defaultItem,
-        builder: (BuildContext context , AsyncSnapshot<NavBarItem> snapshot){
+        builder: (BuildContext context, AsyncSnapshot<NavBarItem> snapshot) {
           return Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
+              borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
             ),
-          )
+          );
         },
       ),
     );
