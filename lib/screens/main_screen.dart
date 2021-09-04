@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/bloc/botton_navbar_bloc.dart';
 import 'package:news_app/style/theme.dart' as Style;
@@ -37,11 +38,11 @@ class _MainScreenState extends State<MainScreen> {
             builder: (BuildContext context, AsyncSnapshot<NavBarItem> snapshot) {
               switch (snapshot.data) {
                 case NavBarItem.HOME:
-                  return Container();
+                  return testScreen();
                 case NavBarItem.SOURCES:
-                  return Container();
+                  return testScreen();
                 case NavBarItem.SEARCH:
-                  return Container();
+                  return testScreen();
                 default:
                   return Container();
               }
@@ -54,9 +55,43 @@ class _MainScreenState extends State<MainScreen> {
           return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+              boxShadow: [
+                BoxShadow(color: Colors.grey[100], spreadRadius: 0, blurRadius: 10.0),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
+              child: BottomNavigationBar(
+                backgroundColor: Colors.white,
+                iconSize: 20.0,
+                unselectedItemColor: Style.Colors.grey,
+                unselectedFontSize: 9.5,
+                selectedFontSize: 9.5,
+                type: BottomNavigationBarType.fixed,
+                fixedColor: Style.Colors.mainColor,
+                currentIndex: snapshot.data.index,
+                onTap: _bottomNavBarBloc.pickItem,
+                items: [
+                  BottomNavigationBarItem(label: "Home", icon: Icon(EvaIcons.homeOutline), activeIcon: Icon(EvaIcons.home)),
+                  BottomNavigationBarItem(label: "Sources", icon: Icon(EvaIcons.gridOutline), activeIcon: Icon(EvaIcons.grid)),
+                  BottomNavigationBarItem(label: "Search", icon: Icon(EvaIcons.searchOutline), activeIcon: Icon(EvaIcons.search)),
+                ],
+              ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget testScreen() {
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [Text("Test Screen")],
       ),
     );
   }
