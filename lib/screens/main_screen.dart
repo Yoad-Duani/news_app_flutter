@@ -1,6 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/bloc/botton_navbar_bloc.dart';
+import 'package:news_app/screens/tabs/home_screen.dart';
 import 'package:news_app/style/theme.dart' as Style;
 
 class MainScreen extends StatefulWidget {
@@ -24,10 +25,12 @@ class _MainScreenState extends State<MainScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50.0),
         child: AppBar(
-          backgroundColor: Style.Colors.mainColor,
-          title: Text(
-            "NewsApp",
-            style: TextStyle(color: Colors.white),
+          backgroundColor: Style.MyColors.mainColor,
+          title: Center(
+            child: Text(
+              "NewsApp",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
       ),
@@ -38,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
             builder: (BuildContext context, AsyncSnapshot<NavBarItem> snapshot) {
               switch (snapshot.data) {
                 case NavBarItem.HOME:
-                  return testScreen();
+                  return HomeScreen();
                 case NavBarItem.SOURCES:
                   return testScreen();
                 case NavBarItem.SEARCH:
@@ -64,11 +67,11 @@ class _MainScreenState extends State<MainScreen> {
               child: BottomNavigationBar(
                 backgroundColor: Colors.white,
                 iconSize: 20.0,
-                unselectedItemColor: Style.Colors.grey,
+                unselectedItemColor: Style.MyColors.grey,
                 unselectedFontSize: 9.5,
                 selectedFontSize: 9.5,
                 type: BottomNavigationBarType.fixed,
-                fixedColor: Style.Colors.mainColor,
+                fixedColor: Style.MyColors.mainColor,
                 currentIndex: snapshot.data.index,
                 onTap: _bottomNavBarBloc.pickItem,
                 items: [

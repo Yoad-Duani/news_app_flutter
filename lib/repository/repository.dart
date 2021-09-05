@@ -4,7 +4,7 @@ import 'package:news_app/model/source_response.dart';
 
 class NewsRepository {
   static String mainURL = "https://newsapi.org/v2/";
-  final String apikey = "my api key";
+  final String apikey = "509ea7c380274d5b9ae18c7a3fe9af7c";
 
   final Dio _dio = Dio();
 
@@ -18,8 +18,8 @@ class NewsRepository {
       Response response = await _dio.get(getSourcesUrl, queryParameters: params);
       return SourceResponse.fromJson(response.data);
     } catch (e, stacktrance) {
-      print("excption occured: $e stackTrance: $stacktrance");
-      return SourceResponse.withError(e);
+      print("excption occured: ${e.toString()} stackTrance: $stacktrance");
+      return SourceResponse.withError(e.toString());
     }
   }
 
@@ -29,7 +29,7 @@ class NewsRepository {
       Response response = await _dio.get(getTopHeadLinesUrl, queryParameters: params);
       return ArticleResponse.fromJson(response.data);
     } catch (e) {
-      return ArticleResponse.withError(e);
+      return ArticleResponse.withError(e.toString());
     }
   }
 
@@ -40,7 +40,7 @@ class NewsRepository {
       Response response = await _dio.get(everythingUrl, queryParameters: params);
       return ArticleResponse.fromJson(response.data);
     } catch (e) {
-      return ArticleResponse.withError(e);
+      return ArticleResponse.withError(e.toString());
     }
   }
 
@@ -50,7 +50,7 @@ class NewsRepository {
       Response response = await _dio.get(getTopHeadLinesUrl, queryParameters: params);
       return ArticleResponse.fromJson(response.data);
     } catch (e) {
-      return ArticleResponse.withError(e);
+      return ArticleResponse.withError(e.toString());
     }
   }
 
@@ -60,7 +60,7 @@ class NewsRepository {
       Response response = await _dio.get(getTopHeadLinesUrl, queryParameters: params);
       return ArticleResponse.fromJson(response.data);
     } catch (e) {
-      return ArticleResponse.withError(e);
+      return ArticleResponse.withError(e.toString());
     }
   }
 }
