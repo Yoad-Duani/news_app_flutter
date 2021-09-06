@@ -5,6 +5,7 @@ import 'package:news_app/elements/loader_element.dart';
 import 'package:news_app/model/source.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/style/theme.dart';
+import 'package:news_app/screens/source_detail.dart';
 
 class TopChannels extends StatefulWidget {
   @override
@@ -59,7 +60,16 @@ class _TopChannelsState extends State<TopChannels> {
               ),
               width: 80.0,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SourceDetail(
+                        source: sources[index],
+                      ),
+                    ),
+                  );
+                },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
