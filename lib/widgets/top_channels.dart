@@ -61,14 +61,7 @@ class _TopChannelsState extends State<TopChannels> {
               width: 80.0,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SourceDetail(
-                        source: sources[index],
-                      ),
-                    ),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SourceDetail(source: sources[index])));
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

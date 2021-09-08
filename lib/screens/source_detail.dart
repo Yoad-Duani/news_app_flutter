@@ -194,7 +194,7 @@ class _SourceDetailState extends State<SourceDetail> {
                     height: 130.0,
                     child: FadeInImage.assetNetwork(
                       placeholder: 'assets/img/placeholder.jpg',
-                      image: articles[index].img,
+                      image: articles[index].img == null ? "https://complianz.io/wp-content/uploads/2019/03/placeholder-300x202.jpg" : articles[index].img,
                       fit: BoxFit.fitHeight,
                       width: double.maxFinite,
                       height: MediaQuery.of(context).size.height * 1 / 3,

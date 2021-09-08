@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:news_app/bloc/botton_navbar_bloc.dart';
 import 'package:news_app/screens/tabs/home_screen.dart';
 import 'package:news_app/style/theme.dart' as Style;
+import 'package:news_app/screens/tabs/source_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -43,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
                 case NavBarItem.HOME:
                   return HomeScreen();
                 case NavBarItem.SOURCES:
-                  return testScreen();
+                  return SourceScreen();
                 case NavBarItem.SEARCH:
                   return testScreen();
                 default:

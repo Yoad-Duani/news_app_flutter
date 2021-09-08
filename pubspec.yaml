@@ -46,6 +46,7 @@ flutter:
 
 
   assets:
+    - assets/img/loadingPlaceholder.gif
     - assets/img/placeholder.jpg
     - assets/logos/abc-news.png
     - assets/logos/al-jazeera-english.png

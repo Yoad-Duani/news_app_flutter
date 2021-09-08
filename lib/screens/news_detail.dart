@@ -55,8 +55,8 @@ class _DetailNewsState extends State<DetailNews> {
             aspectRatio: 16 / 9,
             child: FadeInImage.assetNetwork(
                 alignment: Alignment.topCenter,
-                placeholder: 'images/placeholder.png',
-                image: article.img == null ? "http://to-let.com.bd/operator/images/noimage.png" : article.img,
+                placeholder: 'assets/img/loadingPlaceholder.gif',
+                image: article.img == null ? "https://archive.org/download/no-photo-available/no-photo-available.png" : article.img,
                 fit: BoxFit.cover,
                 width: double.maxFinite,
                 height: MediaQuery.of(context).size.height * 1 / 3),
@@ -93,7 +93,7 @@ class _DetailNewsState extends State<DetailNews> {
                   height: 5.0,
                 ),
                 Html(
-                  data: article.content,
+                  data: article.content == null ? "Press 'Read More' for more details" : article.content,
                   style: {
                     "body": Style(
                       fontSize: FontSize(14.0),
