@@ -8,6 +8,8 @@ import 'package:news_app/model/source.dart';
 import 'package:news_app/style/theme.dart' as myStyle;
 import 'package:timeago/timeago.dart' as timeago;
 
+import 'news_detail.dart';
+
 class SourceDetail extends StatefulWidget {
   final SourceModel source;
   SourceDetail({Key key, @required this.source}) : super(key: key);
@@ -37,6 +39,8 @@ class _SourceDetailState extends State<SourceDetail> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
+          backgroundColor: myStyle.MyColors.mainColor,
+          elevation: 0.0,
           title: Text(""),
         ),
       ),
@@ -128,7 +132,14 @@ class _SourceDetailState extends State<SourceDetail> {
         itemCount: articles.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailNews(
+                            article: articles[index],
+                          )));
+            },
             child: Container(
               decoration: BoxDecoration(
                 border: Border(

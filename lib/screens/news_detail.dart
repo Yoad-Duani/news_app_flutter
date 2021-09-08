@@ -4,6 +4,8 @@ import 'package:news_app/model/article.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:news_app/style/theme.dart' as mystyle;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:news_app/screens/web_view_screen.dart';
 
 class DetailNews extends StatefulWidget {
   final ArticleModel article;
@@ -20,7 +22,8 @@ class _DetailNewsState extends State<DetailNews> {
     return Scaffold(
       bottomNavigationBar: GestureDetector(
         onTap: () {
-          launch(article.url);
+          // launch(article.url);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewScreen(article.url, article.title)));
         },
         child: Container(
           height: 48.0,
