@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 Widget buildErorWidget(String error) {
+  print(error);
   return Container(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,

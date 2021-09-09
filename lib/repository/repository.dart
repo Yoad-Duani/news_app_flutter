@@ -57,7 +57,8 @@ class NewsRepository {
   Future<ArticleResponse> search(String searchValue) async {
     var params = {"apiKey": apikey, "q": searchValue};
     try {
-      Response response = await _dio.get(getTopHeadLinesUrl, queryParameters: params);
+      everythingUrl = everythingUrl + '?';
+      Response response = await _dio.get(everythingUrl, queryParameters: params);
       return ArticleResponse.fromJson(response.data);
     } catch (e) {
       return ArticleResponse.withError(e.toString());
