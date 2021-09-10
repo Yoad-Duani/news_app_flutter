@@ -33,7 +33,6 @@ class NewsRepository {
     }
   }
 
-  //todo: change the apple
   Future<ArticleResponse> getHotNews() async {
     var params = {"apiKey": apikey, "q": "apple", "sortBy": "popularity"};
     try {
@@ -57,7 +56,7 @@ class NewsRepository {
   Future<ArticleResponse> search(String searchValue) async {
     var params = {"apiKey": apikey, "q": searchValue};
     try {
-      everythingUrl = everythingUrl + '?';
+      everythingUrl = everythingUrl;
       Response response = await _dio.get(everythingUrl, queryParameters: params);
       return ArticleResponse.fromJson(response.data);
     } catch (e) {

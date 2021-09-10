@@ -36,7 +36,11 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             controller: _searchController,
             onChanged: (changed) {
-              searchBloc..search(_searchController.text);
+              if (_searchController.text == "") {
+                searchBloc..search("code");
+              } else {
+                searchBloc..search(_searchController.text);
+              }
             },
             decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.never,
