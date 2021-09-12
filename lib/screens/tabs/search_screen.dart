@@ -20,7 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    searchBloc..search("");
+    searchBloc..search("cyber");
   }
 
   @override
@@ -37,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
             controller: _searchController,
             onChanged: (changed) {
               if (_searchController.text == "") {
-                searchBloc..search("code");
+                searchBloc..search("cyber");
               } else {
                 searchBloc..search(_searchController.text);
               }
