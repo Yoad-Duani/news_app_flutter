@@ -13,7 +13,7 @@ class NewsRepository {
   var everythingUrl = "$mainURL/everything";
 
   Future<SourceResponse> getSources() async {
-    var params = {"apiKey": apikey, "language": "en", "country": "us"};
+    var params = {"apiKey": apikey, "language": "en"};
     try {
       Response response = await _dio.get(getSourcesUrl, queryParameters: params);
       return SourceResponse.fromJson(response.data);

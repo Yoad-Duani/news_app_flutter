@@ -28,7 +28,7 @@ class _DetailNewsState extends State<DetailNews> {
         child: Container(
           height: 48.0,
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(color: Colors.white, gradient: mystyle.MyColors.primaryGradient),
+          decoration: BoxDecoration(color: mystyle.MyColors.mainColor),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

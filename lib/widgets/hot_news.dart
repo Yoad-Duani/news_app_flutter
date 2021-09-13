@@ -61,19 +61,19 @@ class _HotNewsState extends State<HotNews> {
         decoration: BoxDecoration(
           color: mystyle.MyColors.mainColor,
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(16.0),
-            topLeft: Radius.circular(16.0),
+            topRight: Radius.circular(30.0),
+            topLeft: Radius.circular(30.0),
           ),
         ),
         height: articles.length / 2 * 210.0,
-        padding: EdgeInsets.only(top: 5.0, right: 5.0, left: 5.0, bottom: 5.0),
+        padding: EdgeInsets.only(top: 10.0, right: 7.0, left: 7.0, bottom: 5.0),
         child: new GridView.builder(
           physics: NeverScrollableScrollPhysics(),
           itemCount: articles.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.85),
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0),
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10.0, bottom: 5.0),
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -87,11 +87,11 @@ class _HotNewsState extends State<HotNews> {
                   width: 220.0,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey[100],
-                        blurRadius: 5.0,
+                        color: Colors.grey[300],
+                        blurRadius: 2.0,
                         spreadRadius: 1.0,
                         offset: Offset(
                           1.0,
@@ -106,7 +106,7 @@ class _HotNewsState extends State<HotNews> {
                         aspectRatio: 16 / 9,
                         child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(5.0), topRight: Radius.circular(5.0)),
+                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
                               image: DecorationImage(
                                   image: articles[index].img == null ? AssetImage("aseets/img/placeholder.jpg") : NetworkImage(articles[index].img), fit: BoxFit.cover)),
                         ),

@@ -3,6 +3,7 @@ import 'package:news_app/widgets/headline_slider.dart';
 import 'package:news_app/widgets/top_channels.dart';
 import 'package:news_app/widgets/hot_news.dart';
 import 'package:news_app/style/theme.dart' as mystyle;
+import 'package:news_app/widgets/categories_news.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: EdgeInsets.all(10.0),
           child: Text(
-            "Top channels",
+            "Categories",
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -27,7 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        TopChannels(),
+        // TopChannels(),
+        CategoriesNews(),
         SizedBox(height: 10.0),
         Padding(
           padding: EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0, bottom: 10.0),
