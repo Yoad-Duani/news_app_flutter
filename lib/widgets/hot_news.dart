@@ -58,8 +58,15 @@ class _HotNewsState extends State<HotNews> {
       );
     } else
       return Container(
+        decoration: BoxDecoration(
+          color: mystyle.MyColors.mainColor,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(16.0),
+            topLeft: Radius.circular(16.0),
+          ),
+        ),
         height: articles.length / 2 * 210.0,
-        padding: EdgeInsets.all(5.0),
+        padding: EdgeInsets.only(top: 5.0, right: 5.0, left: 5.0, bottom: 5.0),
         child: new GridView.builder(
           physics: NeverScrollableScrollPhysics(),
           itemCount: articles.length,

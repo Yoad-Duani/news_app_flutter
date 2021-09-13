@@ -48,6 +48,8 @@ class _MainScreenState extends State<MainScreen> {
                   return SourceScreen();
                 case NavBarItem.SEARCH:
                   return SearchScreen();
+                case NavBarItem.BOOKMARKS:
+                  return testScreen();
                 default:
                   return Container();
               }
@@ -71,7 +73,7 @@ class _MainScreenState extends State<MainScreen> {
                 iconSize: 20.0,
                 unselectedItemColor: Style.MyColors.grey,
                 unselectedFontSize: 9.5,
-                selectedFontSize: 9.5,
+                selectedFontSize: 10.0,
                 type: BottomNavigationBarType.fixed,
                 fixedColor: Style.MyColors.mainColor,
                 currentIndex: snapshot.data.index,
@@ -80,6 +82,7 @@ class _MainScreenState extends State<MainScreen> {
                   BottomNavigationBarItem(label: "Home", icon: Icon(EvaIcons.homeOutline), activeIcon: Icon(EvaIcons.home)),
                   BottomNavigationBarItem(label: "Sources", icon: Icon(EvaIcons.gridOutline), activeIcon: Icon(EvaIcons.grid)),
                   BottomNavigationBarItem(label: "Search", icon: Icon(EvaIcons.searchOutline), activeIcon: Icon(EvaIcons.search)),
+                  BottomNavigationBarItem(label: "Collections", icon: Icon(Icons.bookmarks_outlined), activeIcon: Icon(Icons.bookmarks)),
                 ],
               ),
             ),

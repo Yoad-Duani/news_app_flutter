@@ -6,6 +6,7 @@ import 'package:news_app/model/source.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/style/theme.dart';
 import 'package:news_app/screens/source_detail.dart';
+import 'package:news_app/style/theme.dart' as mystyle;
 
 class TopChannels extends StatefulWidget {
   @override
@@ -49,6 +50,13 @@ class _TopChannelsState extends State<TopChannels> {
       );
     } else {
       return Container(
+        // decoration: BoxDecoration(
+        //   color: mystyle.MyColors.mainColor,
+        //   borderRadius: BorderRadius.only(
+        //     topRight: Radius.circular(16.0),
+        //     topLeft: Radius.circular(16.0),
+        //   ),
+        // ),
         height: 115.0,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,

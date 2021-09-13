@@ -6,6 +6,7 @@ import 'package:news_app/elements/loader_element.dart';
 import 'package:news_app/model/article.dart';
 import 'package:news_app/model/article_response.dart';
 import 'package:news_app/screens/news_detail.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class HeadlineSliderWidget extends StatefulWidget {
@@ -14,6 +15,7 @@ class HeadlineSliderWidget extends StatefulWidget {
 }
 
 class _HeadlineSliderWidgetState extends State<HeadlineSliderWidget> {
+  int activeIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -42,13 +44,23 @@ class _HeadlineSliderWidgetState extends State<HeadlineSliderWidget> {
   Widget _buildHeadlineSlider(ArticleResponse data) {
     List<ArticleModel> articles = data.articles;
     return Container(
-      child: CarouselSlider(
-        options: CarouselOptions(
-          enlargeCenterPage: false,
-          height: 200.0,
-          viewportFraction: 0.9,
-        ),
-        items: getExpenseSliders(articles),
+      child: Column(
+        children: [
+          CarouselSlider(
+            options: CarouselOptions(
+              aspectRatio: 16 / 9,
+              enlargeCenterPage: true,
+              height: 180.0,
+              viewportFraction: 0.8,
+              autoPlay: true,
+              autoPlayInterval: Duration(seconds: 5),
+              // onPageChanged: (index, reason) => setState(() => activeIndex = index),
+            ),
+            items: getExpenseSliders(articles),
+          ),
+          // SizedBox(height: 24.0),
+          // buildIndicator(articles.length),
+        ],
       ),
     );
   }
@@ -66,7 +78,7 @@ class _HeadlineSliderWidgetState extends State<HeadlineSliderWidget> {
                           )));
             },
             child: Container(
-              padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0, bottom: 10.0),
+              padding: EdgeInsets.only(left: 4.0, right: 4.0, top: 10.0, bottom: 10.0),
               child: Stack(
                 children: [
                   Container(
@@ -148,4 +160,9 @@ class _HeadlineSliderWidgetState extends State<HeadlineSliderWidget> {
   String timeAgo(DateTime date) {
     return timeago.format(date, allowFromNow: true, locale: 'en');
   }
+
+  Widget buildIndicator(int articlesLength) => AnimatedSmoothIndicator(
+        activeIndex: activeIndex,
+        count: articlesLength,
+      );
 }
