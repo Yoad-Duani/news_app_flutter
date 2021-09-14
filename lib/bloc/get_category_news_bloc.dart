@@ -3,12 +3,12 @@ import 'package:news_app/model/article_response.dart';
 import 'package:news_app/repository/repository.dart';
 import 'package:rxdart/subjects.dart';
 
-class GetSourceNewsBloc {
+class GetCategoryNewsBloc {
   final NewsRepository _repository = NewsRepository();
   final BehaviorSubject<ArticleResponse> _subject = BehaviorSubject<ArticleResponse>();
 
-  getSourceNewsBloc(String sourceID) async {
-    ArticleResponse response = await _repository.getSourceNews(sourceID);
+  getCategoryNewsBloc(String category) async {
+    ArticleResponse response = await _repository.getCategoryNews(category);
     _subject.sink.add(response);
   }
 
@@ -25,4 +25,4 @@ class GetSourceNewsBloc {
   BehaviorSubject<ArticleResponse> get subject => _subject;
 }
 
-final getSourceNewsBloc = GetSourceNewsBloc();
+final getCategoryNewsBloc = GetCategoryNewsBloc();

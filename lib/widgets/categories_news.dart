@@ -7,6 +7,7 @@ import 'package:news_app/model/source_response.dart';
 import 'package:news_app/style/theme.dart';
 import 'package:news_app/screens/source_detail.dart';
 import 'package:news_app/style/theme.dart' as mystyle;
+import 'package:news_app/screens/category_detail.dart';
 
 class CategoriesNews extends StatefulWidget {
   @override
@@ -72,7 +73,15 @@ class _CategoriesNewsState extends State<CategoriesNews> {
             width: 80.0,
             child: GestureDetector(
               onTap: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => SourceDetail(source: sources[index])));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CategoryDetail(
+                      category: categoriesList[index].name,
+                      icon: categoriesList[index].icon,
+                    ),
+                  ),
+                );
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

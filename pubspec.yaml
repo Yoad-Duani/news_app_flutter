@@ -48,7 +48,6 @@ flutter:
 
 
   assets:
-    - assets/img/Y.D.png
     - assets/img/loadingPlaceholder.gif
     - assets/img/placeholder.jpg
     - assets/logos/abc-news.png

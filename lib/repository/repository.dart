@@ -53,6 +53,18 @@ class NewsRepository {
     }
   }
 
+  Future<ArticleResponse> getCategoryNews(String category) async {
+    var params = {"apiKey": apikey, "category": category, "language": "en", "sortBy": "popularity"};
+    //, "country": "gb"
+    try {
+      getTopHeadLinesUrl = getTopHeadLinesUrl;
+      Response response = await _dio.get(getTopHeadLinesUrl, queryParameters: params);
+      return ArticleResponse.fromJson(response.data);
+    } catch (e) {
+      return ArticleResponse.withError(e.toString());
+    }
+  }
+
   Future<ArticleResponse> search(String searchValue) async {
     var params = {"apiKey": apikey, "q": searchValue};
     try {
