@@ -94,6 +94,13 @@ class _HeadlineSliderWidgetState extends State<HeadlineSliderWidget> {
                               ),
                       ),
                     ),
+                    // child: FadeInImage.assetNetwork(
+                    //   placeholder: 'assets/img/placeholder.jpg',
+                    //   image: article.img == null ? "https://complianz.io/wp-content/uploads/2019/03/placeholder-300x202.jpg" : article.img,
+                    //   fit: BoxFit.fitHeight,
+                    //   width: double.maxFinite,
+                    //   height: MediaQuery.of(context).size.height * 1 / 3,
+                    // ),
                   ),
                   Container(
                     decoration: BoxDecoration(
