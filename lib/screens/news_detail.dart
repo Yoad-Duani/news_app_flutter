@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:news_app/model/article.dart';
+import 'package:news_app/model/favoriteArticle.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:news_app/style/theme.dart' as mystyle;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:news_app/screens/web_view_screen.dart';
+import 'package:news_app/utils/databaseCollections.dart';
 
 class DetailNews extends StatefulWidget {
   final ArticleModel article;
@@ -15,8 +17,57 @@ class DetailNews extends StatefulWidget {
 }
 
 class _DetailNewsState extends State<DetailNews> {
+  Future<dynamic> _collectionsFuture;
+  Future<dynamic> _favoriteArticlesFuture;
   final ArticleModel article;
   _DetailNewsState(this.article);
+
+  @override
+  void initState() {
+    super.initState();
+    // DBProvider.db.initDB();
+    _collectionsFuture = getCollections();
+    _favoriteArticlesFuture = getFavoriteArticles();
+    //getSourceNewsBloc..getSourceNewsBloc(source.id);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // getSourceNewsBloc..drainStream();
+  }
+
+  getCollections() async {
+    final _collectionData = await DBProvider.db.getCollection();
+    return _collectionData;
+  }
+
+  getFavoriteArticles() async {
+    final _collectionData = await DBProvider.db.getFavoriteArticles();
+    return _collectionData;
+  }
+
+  newCollection(String collectionName) async {
+    var favoriteArticle = FavoriteArticle(
+      sourceID: article.source.id,
+      sourceName: article.source.name,
+      sourceDescription: article.source.description,
+      sourceURL: article.source.url,
+      sourceCategory: article.source.category,
+      sourceCountry: article.source.country,
+      sourceLanguage: article.source.language,
+      author: article.author,
+      title: article.title,
+      description: article.description,
+      url: article.url,
+      img: article.img,
+      date: article.date,
+      content: article.content,
+      collectionName: collectionName,
+    );
+    await DBProvider.db.newFavoriteArticle(favoriteArticle);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +99,21 @@ class _DetailNewsState extends State<DetailNews> {
           article.title,
           style: TextStyle(fontSize: Theme.of(context).platform == TargetPlatform.iOS ? 17.0 : 17.0, color: Colors.white, fontWeight: FontWeight.bold),
         ),
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 21.0),
+            child: IconButton(
+              onPressed: () {
+                // Get.toNamed("/coinDataPage");
+              },
+              icon: Icon(
+                Icons.bookmarks_outlined,
+                size: 22.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
       body: ListView(
         children: <Widget>[

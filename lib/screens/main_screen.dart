@@ -5,6 +5,8 @@ import 'package:news_app/screens/tabs/home_screen.dart';
 import 'package:news_app/style/theme.dart' as Style;
 import 'package:news_app/screens/tabs/source_screen.dart';
 import 'package:news_app/screens/tabs/search_screen.dart';
+import 'package:news_app/utils/databaseCollections.dart' as myDB;
+import 'package:news_app/screens/tabs/collections_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -13,12 +15,47 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   BottomNavBarBloc _bottomNavBarBloc;
+  // Future<dynamic> _collectionFuture;
+  dynamic collections;
 
   @override
   void initState() {
     super.initState();
+
     _bottomNavBarBloc = BottomNavBarBloc();
+    // _collectionFuture = getCollections();
   }
+
+  // getCollections() async {
+  //   final _collectionData = await myDB.DBProvider.db.getCollection();
+  //   //print(_collectionData);
+  //   return _collectionData;
+  // }
+
+  // printDataTest() async {
+  //   FutureBuilder(
+  //     future: _collectionFuture,
+  //     builder: (_, collectionData) {
+  //       switch (collectionData.connectionState) {
+  //         case ConnectionState.none:
+  //           print("none");
+  //           return Text("none");
+  //         case ConnectionState.waiting:
+  //           print("waiting");
+  //           return Text("waiting");
+  //         case ConnectionState.done:
+  //           print('done 111');
+  //           {
+  //             collections = collectionData.data;
+  //             print(collections);
+  //             return Text("done");
+  //           }
+  //         default:
+  //           return Text("problem");
+  //       }
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +86,7 @@ class _MainScreenState extends State<MainScreen> {
                 case NavBarItem.SEARCH:
                   return SearchScreen();
                 case NavBarItem.BOOKMARKS:
-                  return testScreen();
+                  return CollectionsScreen();
                 default:
                   return Container();
               }
