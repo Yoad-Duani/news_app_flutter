@@ -36,7 +36,22 @@ class _WebViewScreenState extends State<WebViewScreen> {
             )
           ],
         ),
-        centerTitle: true,
+        centerTitle: false,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 3.0),
+            child: IconButton(
+              onPressed: () {
+                // Get.toNamed("/coinDataPage");
+              },
+              icon: Icon(
+                Icons.share,
+                size: 22.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [

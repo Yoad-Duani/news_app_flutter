@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news_app/model/article.dart';
 import 'package:news_app/model/favoriteArticle.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -17,6 +18,8 @@ class DetailNews extends StatefulWidget {
 }
 
 class _DetailNewsState extends State<DetailNews> {
+  dynamic _collections;
+  dynamic _favoriteArticles;
   Future<dynamic> _collectionsFuture;
   Future<dynamic> _favoriteArticlesFuture;
   final ArticleModel article;
@@ -47,7 +50,7 @@ class _DetailNewsState extends State<DetailNews> {
     return _collectionData;
   }
 
-  newCollection(String collectionName) async {
+  newCollection(String collectionName) {
     var favoriteArticle = FavoriteArticle(
       sourceID: article.source.id,
       sourceName: article.source.name,
@@ -65,7 +68,7 @@ class _DetailNewsState extends State<DetailNews> {
       content: article.content,
       collectionName: collectionName,
     );
-    await DBProvider.db.newFavoriteArticle(favoriteArticle);
+    DBProvider.db.newFavoriteArticle(favoriteArticle);
   }
 
   @override
@@ -97,14 +100,16 @@ class _DetailNewsState extends State<DetailNews> {
         backgroundColor: mystyle.MyColors.mainColor,
         title: new Text(
           article.title,
-          style: TextStyle(fontSize: Theme.of(context).platform == TargetPlatform.iOS ? 17.0 : 17.0, color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: Theme.of(context).platform == TargetPlatform.iOS ? 13.0 : 13.0, color: Colors.white, fontWeight: FontWeight.bold),
         ),
         actions: <Widget>[
           Padding(
-            padding: EdgeInsets.only(right: 21.0),
+            padding: EdgeInsets.only(right: 3.0),
             child: IconButton(
               onPressed: () {
-                // Get.toNamed("/coinDataPage");
+                _addToCollectionsBottomSheet(
+                  context,
+                );
               },
               icon: Icon(
                 Icons.bookmarks_outlined,
@@ -113,70 +118,251 @@ class _DetailNewsState extends State<DetailNews> {
               ),
             ),
           ),
-        ],
-      ),
-      body: ListView(
-        children: <Widget>[
-          AspectRatio(
-            aspectRatio: 16 / 9,
-            child: FadeInImage.assetNetwork(
-                alignment: Alignment.topCenter,
-                placeholder: 'assets/img/loadingPlaceholder.gif',
-                image: article.img == null ? "https://archive.org/download/no-photo-available/no-photo-available.png" : article.img,
-                fit: BoxFit.cover,
-                width: double.maxFinite,
-                height: MediaQuery.of(context).size.height * 1 / 3),
-          ),
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 10.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(article.date.substring(0, 10), style: TextStyle(color: mystyle.MyColors.mainColor, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Text(article.title, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20.0)),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text(
-                  timeUntil(DateTime.parse(article.date)),
-                  style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                Html(
-                  data: article.content == null ? "Press 'Read More' for more details" : article.content,
-                  style: {
-                    "body": Style(
-                      fontSize: FontSize(14.0),
-                      color: Colors.black87,
-                    ),
-                    "html": Style(whiteSpace: WhiteSpace.PRE),
-                  },
-                ),
-              ],
+          Padding(
+            padding: EdgeInsets.only(right: 3.0),
+            child: IconButton(
+              onPressed: () {
+                // Get.toNamed("/coinDataPage");
+              },
+              icon: Icon(
+                Icons.share,
+                size: 22.0,
+                color: Colors.white,
+              ),
             ),
-          )
+          ),
         ],
       ),
+      body: FutureBuilder(
+        future: Future.wait([_collectionsFuture, _favoriteArticlesFuture]),
+        builder: (_, snapshot) {
+          // snapshot.data[0]; //collections
+          // snapshot.data[1]; //favoriteArticles
+
+          if (snapshot.connectionState == ConnectionState.none) {
+            print("none");
+            return LoadingDataWidget();
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            print("waiting");
+            return LoadingDataWidget();
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            print("done");
+            _collections = snapshot.data[0];
+            _favoriteArticles = snapshot.data[1];
+            return _buildBodyNewsDetail(article);
+          }
+
+          print("has problem");
+          return LoadingDataWidget();
+        },
+      ),
+
+      // _buildBodyNewsDetail(article),
     );
+  }
+
+  Widget _buildBodyNewsDetail(ArticleModel article) {
+    return ListView(
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: FadeInImage.assetNetwork(
+              alignment: Alignment.topCenter,
+              placeholder: 'assets/img/loadingPlaceholder.gif',
+              image: article.img == null ? "https://archive.org/download/no-photo-available/no-photo-available.png" : article.img,
+              fit: BoxFit.cover,
+              width: double.maxFinite,
+              height: MediaQuery.of(context).size.height * 1 / 3),
+        ),
+        Container(
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(article.date.substring(0, 10), style: TextStyle(color: mystyle.MyColors.mainColor, fontWeight: FontWeight.bold)),
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Text(article.title, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20.0)),
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text(
+                timeUntil(DateTime.parse(article.date)),
+                style: TextStyle(color: Colors.grey, fontSize: 12.0),
+              ),
+              SizedBox(
+                height: 5.0,
+              ),
+              Html(
+                data: article.content == null ? "Press 'Read More' for more details" : article.content,
+                style: {
+                  "body": Style(
+                    fontSize: FontSize(14.0),
+                    color: Colors.black87,
+                  ),
+                  "html": Style(whiteSpace: WhiteSpace.PRE),
+                },
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  void _addToCollectionsBottomSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            color: Colors.white,
+            height: MediaQuery.of(context).size.height * 0.65,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Add to",
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          print("ok");
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
+                            border: Border.all(
+                              color: Colors.grey[400],
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(7.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "New",
+                                  style: TextStyle(color: mystyle.MyColors.mainColor, fontSize: 14.0),
+                                ),
+                                Icon(
+                                  Icons.add,
+                                  color: mystyle.MyColors.mainColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 18.0,
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _collections.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Container(
+                          // padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                          height: 60,
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                // padding: EdgeInsets.only(right: 10.0),
+                                // width: MediaQuery.of(context).size.width * 2 / 7,
+                                width: 60.0,
+                                height: 60.0,
+                                // height: 130.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/img/placeholder.jpg'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                // child: FadeInImage.assetNetwork(
+                                //   placeholder: 'assets/img/placeholder.jpg',
+                                //   image: articles[index].img == null ? "https://complianz.io/wp-content/uploads/2019/03/placeholder-300x202.jpg" : articles[index].img,
+                                //   fit: BoxFit.fitHeight,
+                                //   width: double.maxFinite,
+                                //   height: MediaQuery.of(context).size.height * 1 / 3,
+                                // ),
+                              ),
+                              SizedBox(
+                                width: 12.0,
+                              ),
+                              Text(
+                                _collections[index]["collectionName"],
+                                style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   String timeUntil(DateTime date) {
     return timeago.format(date, allowFromNow: true);
+  }
+}
+
+class LoadingDataWidget extends StatelessWidget {
+  const LoadingDataWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Loading...',
+            style: TextStyle(
+              fontSize: 28.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[700],
+            ),
+          ),
+          SizedBox(height: 20.0),
+          SpinKitRing(
+            color: Colors.grey[700],
+            size: 60.0,
+          ),
+        ],
+      ),
+    );
   }
 }

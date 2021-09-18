@@ -34,6 +34,7 @@ class DBProvider {
       Batch batch = db.batch();
       batch.insert('collections', {'collectionName': 'collectionTRYYYYYY'});
       batch.insert('collections', {'collectionName': 'collectionTRYY222222'});
+      batch.insert('collections', {'collectionName': 'collectionTRYY333333'});
       batch.insert('favoriteArticles', {
         'sourceID': 'sourceIDTRY',
         'sourceName': 'sourceNameTry',
