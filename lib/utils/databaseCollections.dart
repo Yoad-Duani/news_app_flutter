@@ -69,12 +69,20 @@ class DBProvider {
     return res;
   }
 
+  deleteFavoriteArticle(String url) async {
+    final db = await database;
+    var res = await db.rawDelete('DELETE FROM favoriteArticles WHERE url = ?', [url]);
+    print(await getDatabasesPath());
+    print('ok');
+    return res;
+  }
+
   newFavoriteArticle(FavoriteArticle newFavoriteArticle) async {
     final db = await database;
     var res = await db.rawInsert('''
       iNSERT INTO favoriteArticles (
       sourceID , sourceName , sourceDescription ,sourceURL , sourceCategory , sourceCountry, sourceLanguage , author , title , description , url , img , date ,content , collectionName
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     ''', [
       newFavoriteArticle.sourceID,
       newFavoriteArticle.sourceName,

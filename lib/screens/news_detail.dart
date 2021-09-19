@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:news_app/screens/web_view_screen.dart';
 import 'package:news_app/utils/databaseCollections.dart';
+import 'dart:async';
 
 class DetailNews extends StatefulWidget {
   final ArticleModel article;
@@ -18,6 +19,7 @@ class DetailNews extends StatefulWidget {
 }
 
 class _DetailNewsState extends State<DetailNews> {
+  bool articleInCollection;
   dynamic _collections;
   dynamic _favoriteArticles;
   Future<dynamic> _collectionsFuture;
@@ -28,10 +30,8 @@ class _DetailNewsState extends State<DetailNews> {
   @override
   void initState() {
     super.initState();
-    // DBProvider.db.initDB();
     _collectionsFuture = getCollections();
     _favoriteArticlesFuture = getFavoriteArticles();
-    //getSourceNewsBloc..getSourceNewsBloc(source.id);
   }
 
   @override
@@ -50,7 +50,7 @@ class _DetailNewsState extends State<DetailNews> {
     return _collectionData;
   }
 
-  newCollection(String collectionName) {
+  newFavoriteArticle(String collectionName) {
     var favoriteArticle = FavoriteArticle(
       sourceID: article.source.id,
       sourceName: article.source.name,
@@ -71,74 +71,33 @@ class _DetailNewsState extends State<DetailNews> {
     DBProvider.db.newFavoriteArticle(favoriteArticle);
   }
 
+  // @override
+  // Widget buildA(BuildContext context) {
+  //   return StreamBuilder(
+  //     stream: DBProvider.db.getFavoriteArticles().asStream(),
+  //     builder: (context, snapshot) {
+  //
+  //       if (!snapshot.hasData) {
+  //         print("none");
+  //         return LoadingDataWidget();
+  //       }  else if (snapshot.hasData) {
+  //         print("done");
+  //         _collections = snapshot.data[0];
+  //         _favoriteArticles = snapshot.data[1];
+  //         articleInCollection = checkIsSavedArticle();
+  //         return Scaffold()}
+  //
+  //       print(snapshot.data);
+  //       return Container();
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: GestureDetector(
-        onTap: () {
-          // launch(article.url);
-          Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewScreen(article.url, article.title)));
-        },
-        child: Container(
-          height: 48.0,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(color: mystyle.MyColors.mainColor),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "Read More",
-                style: TextStyle(color: Colors.white, fontFamily: "SFPro-Bold", fontSize: 15.0),
-              ),
-            ],
-          ),
-        ),
-      ),
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: mystyle.MyColors.mainColor,
-        title: new Text(
-          article.title,
-          style: TextStyle(fontSize: Theme.of(context).platform == TargetPlatform.iOS ? 13.0 : 13.0, color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 3.0),
-            child: IconButton(
-              onPressed: () {
-                _addToCollectionsBottomSheet(
-                  context,
-                );
-              },
-              icon: Icon(
-                Icons.bookmarks_outlined,
-                size: 22.0,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 3.0),
-            child: IconButton(
-              onPressed: () {
-                // Get.toNamed("/coinDataPage");
-              },
-              icon: Icon(
-                Icons.share,
-                size: 22.0,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: FutureBuilder(
+    return FutureBuilder(
         future: Future.wait([_collectionsFuture, _favoriteArticlesFuture]),
         builder: (_, snapshot) {
-          // snapshot.data[0]; //collections
-          // snapshot.data[1]; //favoriteArticles
-
           if (snapshot.connectionState == ConnectionState.none) {
             print("none");
             return LoadingDataWidget();
@@ -149,16 +108,110 @@ class _DetailNewsState extends State<DetailNews> {
             print("done");
             _collections = snapshot.data[0];
             _favoriteArticles = snapshot.data[1];
-            return _buildBodyNewsDetail(article);
+            articleInCollection = checkIsSavedArticle();
+            return Scaffold(
+              bottomNavigationBar: GestureDetector(
+                onTap: () {
+                  // launch(article.url);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewScreen(article.url, article.title)));
+                },
+                child: Container(
+                  height: 48.0,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(color: mystyle.MyColors.mainColor),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Read More",
+                        style: TextStyle(color: Colors.white, fontFamily: "SFPro-Bold", fontSize: 15.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              appBar: AppBar(
+                elevation: 0.0,
+                backgroundColor: mystyle.MyColors.mainColor,
+                title: new Text(
+                  article.title,
+                  style: TextStyle(fontSize: Theme.of(context).platform == TargetPlatform.iOS ? 13.0 : 13.0, color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                actions: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(right: 3.0),
+                    child: IconButton(
+                      onPressed: () async {
+                        if (!articleInCollection) {
+                          _addToCollectionsBottomSheet(
+                            context,
+                          );
+                        } else {
+                          await DBProvider.db.deleteFavoriteArticle(article.url);
+                          _deleteFromCollectionsBottomSheet(context);
+                        }
+                      },
+                      icon: !articleInCollection
+                          ? Icon(
+                              Icons.bookmarks_outlined,
+                              size: 22.0,
+                              color: Colors.white,
+                            )
+                          : Icon(
+                              Icons.bookmarks,
+                              size: 22,
+                              color: Colors.white,
+                            ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 3.0),
+                    child: IconButton(
+                      onPressed: () {
+                        // Get.toNamed("/coinDataPage");
+                      },
+                      icon: Icon(
+                        Icons.share,
+                        size: 22.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              body: _buildBodyNewsDetail(article),
+              // body: FutureBuilder(
+              //   future: Future.wait([_collectionsFuture, _favoriteArticlesFuture]),
+              //   builder: (_, snapshot) {
+              //     // snapshot.data[0]; //collections
+              //     // snapshot.data[1]; //favoriteArticles
+              //
+              //     if (snapshot.connectionState == ConnectionState.none) {
+              //       print("none");
+              //       return LoadingDataWidget();
+              //     } else if (snapshot.connectionState == ConnectionState.waiting) {
+              //       print("waiting");
+              //       return LoadingDataWidget();
+              //     } else if (snapshot.connectionState == ConnectionState.done) {
+              //       print("done");
+              //       _collections = snapshot.data[0];
+              //       _favoriteArticles = snapshot.data[1];
+              //       return _buildBodyNewsDetail(article);
+              //     }
+              //
+              //     print("has problem");
+              //     return LoadingDataWidget();
+              //   },
+              // ),
+
+              // _buildBodyNewsDetail(article),
+            );
           }
 
           print("has problem");
           return LoadingDataWidget();
-        },
-      ),
-
-      // _buildBodyNewsDetail(article),
-    );
+        });
   }
 
   Widget _buildBodyNewsDetail(ArticleModel article) {
@@ -281,44 +334,62 @@ class _DetailNewsState extends State<DetailNews> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Container(
-                          // padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                          height: 60,
-                          color: Colors.white,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                // padding: EdgeInsets.only(right: 10.0),
-                                // width: MediaQuery.of(context).size.width * 2 / 7,
-                                width: 60.0,
-                                height: 60.0,
-                                // height: 130.0,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10.0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            try {
+                              await newFavoriteArticle(_collections[index]["collectionName"]);
+                              print("new FavoriteArticle Succeeded");
+
+                              // await update();
+                              // setState(() {
+                              //   // articleInCollection = true;
+                              //   _collectionsFuture = getCollections();
+                              //   _favoriteArticlesFuture = getFavoriteArticles();
+                              // });
+                              Navigator.of(context).pop();
+                            } catch (e) {
+                              print("new FavoriteArticle Fails");
+                            }
+                          },
+                          child: Container(
+                            // padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            height: 60,
+                            color: Colors.white,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  // padding: EdgeInsets.only(right: 10.0),
+                                  // width: MediaQuery.of(context).size.width * 2 / 7,
+                                  width: 60.0,
+                                  height: 60.0,
+                                  // height: 130.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    image: DecorationImage(
+                                      image: AssetImage('assets/img/placeholder.jpg'),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                  image: DecorationImage(
-                                    image: AssetImage('assets/img/placeholder.jpg'),
-                                    fit: BoxFit.cover,
-                                  ),
+                                  // child: FadeInImage.assetNetwork(
+                                  //   placeholder: 'assets/img/placeholder.jpg',
+                                  //   image: articles[index].img == null ? "https://complianz.io/wp-content/uploads/2019/03/placeholder-300x202.jpg" : articles[index].img,
+                                  //   fit: BoxFit.fitHeight,
+                                  //   width: double.maxFinite,
+                                  //   height: MediaQuery.of(context).size.height * 1 / 3,
+                                  // ),
                                 ),
-                                // child: FadeInImage.assetNetwork(
-                                //   placeholder: 'assets/img/placeholder.jpg',
-                                //   image: articles[index].img == null ? "https://complianz.io/wp-content/uploads/2019/03/placeholder-300x202.jpg" : articles[index].img,
-                                //   fit: BoxFit.fitHeight,
-                                //   width: double.maxFinite,
-                                //   height: MediaQuery.of(context).size.height * 1 / 3,
-                                // ),
-                              ),
-                              SizedBox(
-                                width: 12.0,
-                              ),
-                              Text(
-                                _collections[index]["collectionName"],
-                                style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
-                              ),
-                            ],
+                                SizedBox(
+                                  width: 12.0,
+                                ),
+                                Text(
+                                  _collections[index]["collectionName"],
+                                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -329,6 +400,69 @@ class _DetailNewsState extends State<DetailNews> {
             ),
           );
         });
+  }
+
+  _deleteFromCollectionsBottomSheet(context) {
+    Timer _timer;
+    _timer = new Timer(const Duration(seconds: 3, milliseconds: 50), () {
+      Navigator.of(context).pop();
+
+      // setState(() {
+      // });
+    });
+
+    // update();
+
+    // setState(() {
+    //   // articleInCollection = false;
+    //   _collectionsFuture = getCollections();
+    //   _favoriteArticlesFuture = getFavoriteArticles();
+    //   // articleInCollection = false;
+    // });
+
+    showModalBottomSheet(
+        // clipBehavior: Clip.none,
+        // elevation: 0.0
+        // ,
+        barrierColor: Colors.white.withOpacity(0),
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            color: Colors.black,
+            height: 50.0,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Removed",
+                  style: TextStyle(color: Colors.white60),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  bool checkIsSavedArticle() {
+    for (var favoriteArticle in _favoriteArticles) {
+      if (favoriteArticle["url"] == article.url) {
+        print("checkIsSavedArticle -- true");
+        return true;
+      }
+    }
+    print("checkIsSavedArticle -- false");
+    return false;
+  }
+
+  update() async {
+    try {
+      _collections = await getCollections();
+      _favoriteArticles = await getFavoriteArticles();
+      print("update Collections Succeeded");
+    } catch (e) {
+      print(e);
+    }
   }
 
   String timeUntil(DateTime date) {
@@ -344,6 +478,7 @@ class LoadingDataWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
