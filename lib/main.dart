@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/screens/login_screen.dart';
 import 'package:news_app/screens/main_screen.dart';
 import 'package:splashscreen/splashscreen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:news_app/repository/user_repository.dart';
 
 import 'bloc/get_top_headlines_bloc.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -14,12 +19,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // final userRepo = UserRepository();
+    // userRepo.createUserWithEmailAndPassword("yoaddd@gmail.com", "123456789");
     return MaterialApp(
       // title: 'Flutter Demo',
       // theme: ThemeData(
       //   primarySwatch: Colors.blue,
       // ),
-      home: MainScreen(),
+      // home: MainScreen(),
+      home: LoginScreen(),
       debugShowCheckedModeBanner: false,
     );
     // return SplashScreen(

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "594868558286",
+    "project_id": "news-app-144ee",
+    "storage_bucket": "news-app-144ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594868558286:android:847beea5559e01bb56b39f",
+        "android_client_info": {
+          "package_name": "yoadduani.news_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594868558286-9bo5v20lja8p7hkvoonka5j90aiukv92.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "yoadduani.news_app",
+            "certificate_hash": "9e6db93ccd0a18952e14dc4945c072a78d966a0e"
+          }
+        },
+        {
+          "client_id": "594868558286-e6t03hq7i0mhtr7jb3d6up7fjjg4bv07.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8Qgr3rrQUmDHx2sITTR7kf08Ot0xDPNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594868558286-e6t03hq7i0mhtr7jb3d6up7fjjg4bv07.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
